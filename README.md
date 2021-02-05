@@ -1,4 +1,4 @@
-# DLfromScratch3
+# Deep Learning from Scratch
 Python programming to Implement Neural Network
 -----
 
