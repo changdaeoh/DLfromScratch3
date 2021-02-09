@@ -45,7 +45,7 @@ def tanh(x):
     return Tanh()(x)
 
 #---------------------------------------------------------------------------------------
-# reshape, transpose
+# Tensor Operations : reshape, transpose
 #---------------------------------------------------------------------------------------
 
 class Reshape(Function):
@@ -67,6 +67,30 @@ def reshape(x, shape):
     return Reshape(shape)(x)
 
 
+class Transpose(Function):
+    def __init__(self, axes=None):
+        self.axes = axes
+
+    def forward(self, x):
+        y = x.transpose(self.axes)
+        return y
+
+    def backward(self, gy):
+        if self.axes is None:
+            return transpose(gy)
+
+        axes_len = len(self.axes)
+        inv_axes = tuple(np.argsort([ax % axes_len for ax in self.axes]))
+        return transpose(gy, inv_axes)
+
+
+def transpose(x, axes=None):
+    return Transpose(axes)(x)
+
+
+#---------------------------------------------------------------------------------------
+# 
+#---------------------------------------------------------------------------------------
 
 
 class Sum(Function):
@@ -80,6 +104,7 @@ class Sum(Function):
         return y
 
     def backward(self, gy):
+        gy = utils.reshape_sum_backward(gy, self.x_shape, self.axis, self.keepdims)
         gx = broadcast_to(gy, self.x_shape)
         return gx
 
