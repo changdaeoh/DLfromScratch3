@@ -14,7 +14,7 @@ class Layer:
         self._params = set()                
         
     def __setattr__(self, name, value):
-        if isinstance(value, Parameter):
+        if isinstance(value, (Parameter, Layer)):  # add Layer
             self._params.add(name)
         super().__setattr__(name, value)
     
@@ -34,12 +34,19 @@ class Layer:
     # 해당 레이어 인스턴스가 가진 파라미터들에 접근
     def params(self):
         for name in self._params:
-            yield self.__dict__[name] # return과 비슷하나 처리를 종료하지 않음 - 반복문과 함께사용가능
+            # name을 키(속성 이름)로써 저장된 value object(속성 값)에 접근
+            obj = self.__dict__[name] 
+            
+            if isinstance(obj, Layer):  # yield from layer       
+                yield from obj.params() # recurrent call
+            else:
+                yield obj
     
     # 모든 매개변수들의 그레디언트를 초기화            
     def cleargrads(self):
         for param in self.params():
             param.cleargrad()
+
 
 
 
