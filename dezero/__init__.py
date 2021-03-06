@@ -26,9 +26,13 @@ else:
     from dezero.layers import Layer
     from dezero.models import Model
     
-    import dezero.utils
+    import dezero.datasets
+    import dezero.optimizers
     import dezero.functions
     import dezero.layers
+    import dezero.utils
+    import dezero.cuda
+
 
 setup_variable()
 __version__ = '0.0.13'
