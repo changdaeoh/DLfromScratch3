@@ -147,3 +147,19 @@ def logsumexp(x, axis=1):
     xp.log(s, out=s)
     m += s
     return m
+
+
+
+# =============================================================================
+# others
+# =============================================================================
+
+
+def pair(x):
+    if isinstance(x, int):
+        return (x, x)
+    elif isinstance(x, tuple):
+        assert len(x) == 2
+        return x
+    else:
+        raise ValueError
