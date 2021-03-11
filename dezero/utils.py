@@ -149,6 +149,33 @@ def logsumexp(x, axis=1):
     return m
 
 
+# =============================================================================
+# download function
+# =============================================================================
+cache_dir = os.path.join(os.path.expanduser('~'), 'dezero_dir')
+
+def get_file(url, file_name=None):
+    if file_name is None:
+        file_name = url[url.rfind('/') + 1:]
+    file_path = os.path.join(cache_dir, file_name)
+
+    if not os.path.exists(cache_dir):
+        os.mkdir(cache_dir)
+
+    if os.path.exists(file_path):
+        return file_path
+
+    print("Downloading: " + file_name)
+    try:
+        urllib.request.urlretrieve(url, file_path)
+    except (Exception, KeyboardInterrupt) as e:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        raise
+    print(" Done")
+
+    return file_path
+
 
 # =============================================================================
 # others
