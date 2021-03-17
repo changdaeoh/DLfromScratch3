@@ -1,4 +1,6 @@
 import math
+from dezero import cuda
+
 pil_available = True
 try:
     from PIL import Image
@@ -9,12 +11,13 @@ from dezero import cuda
 
 
 class DataLoader:
-    def __init__(self, dataset, batch_size, shuffle=True):
+    def __init__(self, dataset, batch_size, shuffle=True, gpu = False):
         self.dataset = dataset
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.data_size = len(dataset)
         self.max_iter = math.ceil(self.data_size / batch_size)
+        self.gpu = gpu
 
         self.reset()
 
@@ -36,11 +39,21 @@ class DataLoader:
         i, batch_size = self.iteration, self.batch_size
         batch_index = self.index[i * batch_size:(i + 1) * batch_size]
         batch = [self.dataset[i] for i in batch_index]
-        x = np.array([example[0] for example in batch])
-        t = np.array([example[1] for example in batch])
+        xp = cuda.cupy if self.gpu else np
+        x = xp.array([example[0] for example in batch])
+        t = xp.array([example[1] for example in batch])
 
         self.iteration += 1
         return x, t
 
     def next(self):
         return self.__next__()
+    
+    # gpu 지원
+    def to_cpu(self):
+        if self.data is not None:
+            self.data = dezero.cuda.as_numpy(self.data)
+
+    def to_gpu(self):
+        if self.data is not None:
+            self.data = dezero.cuda.as_cupy(self.data)
