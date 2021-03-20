@@ -664,14 +664,14 @@ def clip(x, x_min, x_max):
 # =============================================================================
 # conv2d / col2im / im2col / basic_math
 # =============================================================================
-# from dezero.functions_conv import conv2d
-# from dezero.functions_conv import deconv2d
-# from dezero.functions_conv import conv2d_simple
-# from dezero.functions_conv import im2col
-# from dezero.functions_conv import col2im
-# from dezero.functions_conv import pooling_simple
-# from dezero.functions_conv import pooling
-# from dezero.functions_conv import average_pooling
+from dezero.functions_conv import conv2d
+from dezero.functions_conv import deconv2d
+from dezero.functions_conv import conv2d_simple
+from dezero.functions_conv import im2col
+from dezero.functions_conv import col2im
+from dezero.functions_conv import pooling_simple
+from dezero.functions_conv import pooling
+from dezero.functions_conv import average_pooling
 from dezero.core import add
 from dezero.core import sub
 from dezero.core import rsub
